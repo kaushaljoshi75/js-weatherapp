@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Weather App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .weather-app {
+      background: #ffffff;
+      width: 320px;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .weather-app h1 {
+      margin-bottom: 15px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .search-box button {
+      padding: 8px 12px;
+      border: none;
+      background: #4a90e2;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .search-box button:hover {
+      background: #357abd;
+    }
+
+    .weather-info h2 {
+      margin-bottom: 5px;
+    }
+
+    .temp {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .description {
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    .details {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .details div {
+      width: 48%;
+      background: #f2f2f2;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .details span {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .hide {
+      display: none;
+    }
+    .show {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="weather-app">
+    <h1>Weather App</h1>
+
+    <div class="search-box">
+      <input id="city" type="text" placeholder="Enter your city name">
+      <button id="searchButton">Search</button>
+    </div>
+
+    <div class="weather-info">
+      <h2 id="cityName"></h2>
+      <p id="temp" class="temp"></p>
+      <p id="air" class="description"></p>
+
+      <div class="details hide" >
+        <div>
+          <span>Humidity</span>
+          <p id="humidity"></p>
+        </div>
+        <div>
+          <span>Wind</span>
+          <p id="wind"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+      const button = document.getElementById('searchButton');
+
+      async function getData (cityName) {
+          const result = await fetch(`http://api.weatherapi.com/v1/current.json?key=8081dbb3058e4bdb881145730262601&q=${cityName}&aqi=yes`); 
+          return await result.json();
+      }
+      
+      button.addEventListener('click', async () => {
+          const inputName = document.getElementById('city');
+          const cityName = document.getElementById('cityName');
+          const temp = document.getElementById('temp');
+          const air = document.getElementById('air');
+          const description = document.getElementById('description');
+          const humidity = document.getElementById('humidity');
+          const wind = document.getElementById('wind');
+          const showDiv = document.querySelector('.details');
+          if (inputName.value !== '') {
+              const data = await getData(inputName.value);
+              console.log(data);
+              cityName.innerText = data.location.name;
+              temp.innerText = data.current.temp_c + '°C';
+              air.innerText = "Air Auality : " + data.current.air_quality.co;
+              showDiv.classList.remove('hide');
+              showDiv.classList.add('show');
+              humidity.innerText = data.current.humidity + " %";
+              wind.innerText = data.current.wind_kph + " km/h";
+              inputName.value = "";
+
+
+          } else {
+            console.log('City name requiered!');
+
+          }
+      });
+  </script>
+</body>
+</html>
