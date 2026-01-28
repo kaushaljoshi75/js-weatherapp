@@ -132,7 +132,7 @@
       const button = document.getElementById('searchButton');
 
       async function getData (cityName) {
-          const result = await fetch(`http://api.weatherapi.com/v1/current.json?key=8081dbb3058e4bdb881145730262601&q=${cityName}&aqi=yes`); 
+          const result = await fetch(`https://api.weatherapi.com/v1/current.json?key=8081dbb3058e4bdb881145730262601&q=${cityName}&aqi=yes`); 
           return await result.json();
       }
       
